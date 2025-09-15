@@ -1,10 +1,10 @@
-package com.example.factory_simple_0;
+package com.example.factory_simple;
 
-public class GlassDoor implements Door{
+public class MetalDoor implements Door{
     private final float width;
     private final float height;
 
-    public GlassDoor(float width, float height) {
+    public MetalDoor(float width, float height) {
         this.width = width;
         this.height = height;
     }

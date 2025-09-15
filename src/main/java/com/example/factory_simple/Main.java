@@ -1,4 +1,4 @@
-package com.example.factory_simple_0;
+package com.example.factory_simple;
 
 public class Main {
     public static void main(String[] args) {

@@ -5,15 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="770011d8-abd0-4025-9679-b36d9573b199" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/factory_simple_0/Door.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/factory_simple_0/DoorFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/factory_simple_0/DoorType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/factory_simple_0/GlassDoor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/factory_simple_0/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/factory_simple_0/MetalDoor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/factory_simple_0/WoodenDoor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/factory_simple_0/Door.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/factory_simple/Door.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/factory_simple_0/DoorFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/factory_simple/DoorFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/factory_simple_0/DoorType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/factory_simple/DoorType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/factory_simple_0/GlassDoor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/factory_simple/GlassDoor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/factory_simple_0/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/factory_simple/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/factory_simple_0/MetalDoor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/factory_simple/MetalDoor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/factory_simple_0/WoodenDoor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/factory_simple/WoodenDoor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +30,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "auiferj"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/auiferj/design-patterns-for-humans.git",
+    "accountId": "1ebfb409-c114-45a6-a405-689aa7a27832"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -64,11 +74,11 @@
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.example.factory_simple_0.Main" />
+      <option name="MAIN_CLASS_NAME" value="com.example.factory_simple.Main" />
       <module name="design-patterns-for-humans" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.example.factory_simple_0.*" />
+          <option name="PATTERN" value="com.example.factory_simple.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -100,7 +110,7 @@
       <updated>1757669722126</updated>
       <workItem from="1757669722944" duration="657000" />
       <workItem from="1757670418775" duration="1383000" />
-      <workItem from="1757896357834" duration="318000" />
+      <workItem from="1757896357834" duration="776000" />
     </task>
     <servers />
   </component>

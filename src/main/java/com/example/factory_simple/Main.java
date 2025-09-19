@@ -1,5 +1,8 @@
 package com.example.factory_simple;
 
+/**
+ * 简单工厂
+ */
 public class Main {
     public static void main(String[] args) {
         // Make me a door of 100x200
@@ -9,7 +12,7 @@ public class Main {
         System.out.println("Height: " + door.getHeight());
 
         // Make me a door of 50x100
-        Door door2 = DoorFactory.createDoor(DoorType.WOODEN,50.0f, 100.0f);
+        Door door2 = DoorFactory.createDoor(DoorType.GLASS,50.0f, 100.0f);
 
         System.out.println("Width: " + door2.getWidth());
         System.out.println("Height: " + door2.getHeight());

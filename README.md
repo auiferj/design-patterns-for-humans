@@ -1,3 +1,18 @@
+### 设计模式分类
+
+| **创建型设计模式 (Creational Design Patterns)** | **结构型设计模式 (Structural Design Patterns)** | **行为型设计模式 (Behavioral Design Patterns)** |
+| :--- | :--- | :--- |
+| Simple Factory | Adapter | Chain of Responsibility |
+| Factory Method | Bridge | Command |
+| Abstract Factory | Composite | Iterator |
+| Builder | Decorator | Mediator |
+| Prototype | Facade | Memento |
+| Singleton | Flyweight | Observer |
+| | Proxy | Visitor |
+| | | Strategy |
+| | | State |
+| | | Template Method |
+
 ### 简单工厂
 简单工厂模式只是为客户端生成一个实例，而不向客户端暴露任何实例化的逻辑。
 
@@ -171,4 +186,199 @@ public Computer(String cpu, String gpu, int ramSizeGB, String storageType, int s
 | **产品复杂度** | 适用于创建单一、标准化的产品 | 适用于创建复杂、需要高度定制的产品 |
 | **灵活性** | 低。客户无法控制创建过程的细节。 | 高。客户可以精确控制对象的各个组成部分。 |
 | **类比** | 固定套餐 (Big Hardee) | 自定义套餐 (Subway) |
+
+
+### 原型模式
+关于浅拷贝的问题：修改拷贝得到的对象的引用类型的字段时，会把原始的对象的该字段也改掉。
+
+比如：
+```
+Sheep original = new Sheep("Dolly");
+original.addTrait("Friendly");
+
+Sheep cloned = original.clone();
+cloned.addTrait("Playful");
+
+System.out.println(original.getTraits()); // 输出: [Friendly, Playful]
+// 糟糕！原始对象也被修改了，因为共享同一个List对象
+```
+解决方案：实现深拷贝
+```
+@Override
+public Sheep clone() {
+    try {
+        Sheep cloned = (Sheep) super.clone(); // 先进行浅拷贝
+        // 对引用类型进行深拷贝
+        cloned.traits = new ArrayList<>(this.traits); // 创建新的ArrayList
+        return cloned;
+    } catch (CloneNotSupportedException e) {
+        throw new AssertionError();
+    }
+}
+```
+原型模式的要求：
+
+1. 必须实现 Cloneable 接口
+2. 必须重写并公开 clone() 方法
+
+浅拷贝：只复制引用，不复制引用指向的对象。简单来说，浅拷贝就是“只复制一层”。
+
+对于基本类型，修改拷贝对象属性值，不会影响原始对象属性值。
+
+对于引用类型，修改拷贝对象的属性值，不会复制一个新的，而是会复制该属性的引用地址。
+
+浅拷贝：只复制对象的顶层。如果顶层属性是基本类型，则直接复制值；如果是引用类型，则只复制内存地址。
+
+深拷贝：不仅复制对象本身，还会递归地复制所有引用类型的属性，直到所有对象都被复制到新的内存地址。这样，新旧对象之间完全独立，互不影响。
+
+这个模型的使用：
+
+创建现有对象的副本不是最终目标，而是一个起点。你可以再福报基础上进行定制化修改，得到你想要的具体对象。而不是经历从头创建对象并进行设置的麻烦。
+
+这是这个模式要解决的痛点---避免重复、繁琐的初始化过程。
+
+为什么这个麻烦值得避免？
+1. 复杂的初始化过程
+```
+// "从头创建的麻烦"示例
+public class ComplexObject {
+    public ComplexObject() {
+        loadConfigFromFile();    // 耗时操作
+        initializeDatabase();    // 复杂初始化
+        setupNetworkConnection();// 可能失败的操作
+        loadUserPreferences();   // 需要外部资源
+        // ... 更多繁琐设置
+    }
+}
+
+// 使用原型模式避免麻烦
+ComplexObject prototype = new ComplexObject(); // 只做一次麻烦的初始化
+ComplexObject newInstance = prototype.clone(); // 后续都通过克隆
+```
+2. 多重参数配置
+```
+// 传统的麻烦方式
+GameCharacter warrior = new GameCharacter(
+    "Warrior",           // 类型
+    100,                 // 生命值
+    50,                  // 攻击力
+    30,                  // 防御力
+    heavyArmor,          // 装备
+    aggressiveAI,        // AI行为
+    warriorAppearance    // 外观
+);
+
+// 原型模式的简便方式
+GameCharacter warriorTemplate = new GameCharacter(...); // 一次性配置
+GameCharacter warrior1 = warriorTemplate.clone();
+GameCharacter warrior2 = warriorTemplate.clone();
+```
+3. 真实世界比喻
+比喻1：文档模板
+
+从头创建：手动设置页边距、字体、页眉页脚、样式...
+
+原型模式：打开一个模板文档 → 修改内容 → 完成
+
+比喻2：烹饪
+
+从头创建：买食材、准备调料、按步骤烹饪
+
+原型模式：有一碗做好的汤 → 加点盐/胡椒 → 完成
+
+比喻3：汽车制造
+
+从头创建：制造每个零件、组装、测试
+
+原型模式：有一辆现车 → 换个颜色/加个配件 → 完成
+4. 代码
+游戏开发场景
+```
+// 麻烦的传统方式
+public class Monster {
+    private String type;
+    private int health;
+    private int damage;
+    private Behavior behavior;
+    private Appearance appearance;
+    
+    public Monster(String type) {
+        this.type = type;
+        this.health = loadHealthFromConfig(type);    // 麻烦的配置加载
+        this.damage = loadDamageFromConfig(type);
+        this.behavior = createBehavior(type);        // 复杂的对象创建
+        this.appearance = loadAppearance(type);      // 耗时的资源加载
+    }
+}
+
+// 使用原型模式的简便方式
+Monster dragonTemplate = new Monster("Dragon"); // 只做一次麻烦的初始化
+
+// 需要新怪物时直接克隆
+Monster dragon1 = dragonTemplate.clone();
+Monster dragon2 = dragonTemplate.clone();
+dragon2.setHealth(150); // 按需微调
+
+Monster orcTemplate = new Monster("Orc"); // 另一个原型
+Monster orc1 = orcTemplate.clone();
+```
+游戏开发 - 创建大量相似敌人
+```
+// 原型：一个配置好的敌人模板
+Enemy dragonTemplate = new Enemy("Dragon", 1000, 50);
+dragonTemplate.setBehavior(aggressiveBehavior);
+dragonTemplate.setAppearance(dragonAppearance);
+
+// 通过克隆创建多个相同类型的敌人
+List<Enemy> dragonArmy = new ArrayList<>();
+for (int i = 0; i < 50; i++) {
+    Enemy dragon = dragonTemplate.clone(); // 快速创建
+    dragon.setPosition(randomPosition());  // 微调个性化设置
+    dragonArmy.add(dragon);
+}
+```
+文档处理 - 模板文档
+```
+// 创建文档模板
+Document invoiceTemplate = new Document();
+invoiceTemplate.setHeader("公司发票模板");
+invoiceTemplate.setFooter("谢谢惠顾");
+invoiceTemplate.addStyle(corporateStyle);
+
+// 为每个客户克隆并定制
+Document customerInvoice = invoiceTemplate.clone();
+customerInvoice.setCustomerName("张三");
+customerInvoice.setAmount(5000);
+```
+
+5. 原型模式的适用场景
+当对象创建成本高昂时（数据库连接、网络请求、文件IO）
+
+当需要创建大量相似对象时（游戏中的NPC、图形界面元素）
+
+当系统需要独立于如何创建、组合和表示对象时
+
+当需要避免构建与产品类层次平行的工厂类层次时
+
+6. 总结
+
+它承认很多时候我们不需要从零开始创造，而是在现有成果的基础上进行适当的修改和定制。这种模式：
+
+✅ 节省资源：避免重复的昂贵初始化
+
+✅ 提高性能：克隆通常比新建更快
+
+✅ 保持灵活：可以在运行时动态创建对象
+
+✅ 简化代码：避免复杂的构造函数和配置逻辑
+
+正是这种"站在巨人的肩膀上"的思维，让原型模式成为处理复杂对象创建场景的强大工具。
+
+### 单例模式
+现实世界的例子：
+
+
+
+
+
 

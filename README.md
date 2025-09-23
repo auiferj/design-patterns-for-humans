@@ -417,6 +417,128 @@ Java 语言规范规定，枚举常量是天然的单例。当你定义一个枚
 
 总结来说，使用枚举来实现单例模式，代码简洁、安全且健壮，能够有效避免传统实现中可能遇到的所有问题，因此被认为是 Java 中实现单例模式的最佳方式。
 
+### 桥接模式
+桥接模式的核心：将网页抽象（WebPage）与主题实现（Theme）分离，让它们可以独立变化。
+
+使用场景：桥接模式在实际开发中主要用于解决多个维度变化的组合爆炸问题。
+
+两个维度都需要独立扩展（如：形状×颜色）
+
+避免永久性的绑定（需要在运行时切换实现）
+
+抽象和实现都需要通过继承扩展
+
+存在多个变化维度，且维度会组合爆炸
+
+实际案例参考：
+
+Spring框架中的JDBC抽象
+
+抽象部分：JdbcTemplate（统一的操作接口）
+
+实现部分：各种数据库驱动（MySQL、Oracle、PostgreSQL等）
+
+1. 多维度独立变化的场景
+
+🔧 典型场景：图形绘制系统
+```
+// 抽象部分：形状
+abstract class Shape {
+protected Color color;  // 桥接的颜色维度
+
+public Shape(Color color) {
+this.color = color;
+}
+
+abstract void draw();
+}
+
+// 实现部分：颜色
+interface Color {
+void applyColor();
+}
+
+// 组合使用
+Shape redCircle = new Circle(new RedColor());
+Shape blueRectangle = new Rectangle(new BlueColor());
+```
+
+实际应用：UI组件库（按钮、输入框等）需要支持多种样式主题
+
+2. 平台无关性抽象
+
+🔧 典型场景：跨平台开发
+```
+// 抽象部分：应用功能
+interface Notification {
+void send(String message);
+}
+
+// 实现部分：平台具体实现
+interface NotificationPlatform {
+void deliver(String message);
+}
+
+class IOSNotification implements Notification {
+private NotificationPlatform platform;
+// 桥接到iOS具体实现
+}
+
+class AndroidNotification implements Notification {
+private NotificationPlatform platform;
+// 桥接到Android具体实现
+}
+```
+
+实际应用：React Native、Flutter等跨平台框架的底层架构
+
+3. 数据库访问层设计
+
+🔧 典型场景：多数据库支持
+```
+// 抽象部分：数据访问接口
+interface UserRepository {
+User findById(Long id);
+void save(User user);
+}
+
+// 实现部分：数据库驱动
+interface DatabaseDriver {
+Connection getConnection();
+void execute(String sql);
+}
+
+class MySQLUserRepository implements UserRepository {
+private MySQLDriver driver;  // 桥接到MySQL
+}
+
+class PostgreSQLUserRepository implements UserRepository {
+private PostgreSQLDriver driver;  // 桥接到PostgreSQL
+}
+```
+4. 消息通知系统
+
+🔧 典型场景：多通道消息推送
+```
+// 消息类型维度
+interface Message {
+String getContent();
+}
+
+// 发送通道维度  
+interface MessageChannel {
+void send(Message message);
+}
+
+// 灵活组合
+Message alert = new AlertMessage();
+MessageChannel smsChannel = new SMSChannel();
+MessageChannel emailChannel = new EmailChannel();
+
+// 同一消息通过不同通道发送
+smsChannel.send(alert);
+emailChannel.send(alert);
+```
 
 
 

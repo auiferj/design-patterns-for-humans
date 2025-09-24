@@ -8,6 +8,9 @@ public class Circle implements Shape {
     }
     @Override
     public void draw() {
-        System.out.println(color.applyColor() + "画圈");
+        // 这是高层的业务逻辑：“画一个圆形”这个动作...
+        System.out.println("画一个圆形，然后");
+        // ... 委派给底层的“实现”去完成填充工作。
+        System.out.println(color.applyColor());
     }
 }

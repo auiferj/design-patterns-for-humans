@@ -4,6 +4,6 @@ public class RedColor implements Color {
     @Override
     public String applyColor() {
         //System.out.println("RedColor = 使用红色");
-        return "RedColor = 使用红色";
+        return "RedColor = 使用红色填充";// 具体的“怎么做”
     }
 }

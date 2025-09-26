@@ -686,7 +686,7 @@ emailChannel.send(alert);
 ---
 它们可以结合使用，例如，在组合模式的 `FileSystemComponent` 接口的实现中，其绘制功能可以通过桥接模式来解耦不同的渲染引擎。
 
-### 装饰者模式
+### 装饰器模式
 
 
 

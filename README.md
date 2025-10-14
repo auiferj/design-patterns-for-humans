@@ -688,6 +688,769 @@ emailChannel.send(alert);
 
 ### 装饰器模式
 
+### 外观模式
+在代码中，Facade是以一个类的实例的形式存在的。它不是抽象的概念，而是一个你可以创建和调用的具体对象。
+
+Facade的核心目的：它自己有一个简单明了的方法（接口），让外部很容易调用。
+
+需要被简化的对象：它通常部署一个小模块，而可能是一个：
+
+* 复杂的类库
+* 庞大的框架
+* 一系列相互关联、相互依赖的类组成的子系统
+
+### 享元模式
+现实世界：
+
+例子：茶摊卖新鲜茶时，不会没来一个顾客就重新煮一次，而是一次性多煮一些，保存起来给多个顾客分享。
+
+目的：节省资源（如煤气、时间、茶叶等）
+
+联系到设计模式：享元模式的核心就是 共享---通过共享相同的对象来减少资源消耗，提高效率。
+
+在软件工程中，享元模式用于减少内存使用，通过共享尽可能多的相似对象来处理大量细粒度的对象。
+
+关键概念：
+
+1. 内在状态
+* 可以共享的、不变的部分
+* 在茶摊例子中：茶的味道、配方（所有顾客喝的茶都是一样的）
+2. 外在状态
+* 不可共享的、变化的部分
+* 在茶摊例子中：哪个顾客喝、什么时候喝、用哪个杯子装
+
+共享相同内容：多个顾客共享一壶茶
+
+节省资源：避免重复创建相同的对象
+
+分离变与不变：茶的配方不变（内在状态），顾客信息变化（外在状态）
+
+这种模式在处理大量相似对象时（如图形编辑器中的字符、游戏中的树木等）特别有用，能显著降低内存占用。
+
+享元模式的两个主要目标：
+
+1. 最小化内存使用
+* 减少程序中对象的数量
+* 避免重复存储相同是数据
+2. 最小化计算开销
+* 避免重复执行相同的计算
+* 复用已经创建的对象和计算结果
+
+关键机制：共享
+
+找出对象中相同的部分
+
+让多个对象共享这些相同的部分
+
+只保留不同的部分（外在状态）作为单独数据
+
+实际例子：
+
+例子1：文字处理器
+````
+// 共享的字符样式（内在状态）
+class CharacterStyle {
+    private String font;
+    private int size;
+    private String color;
+    
+    public CharacterStyle(String font, int size, String color) {
+        this.font = font;
+        this.size = size;
+        this.color = color;
+    }
+    // 这个对象可以被多个字符共享
+}
+
+// 字符本身（包含位置信息）
+class Character {
+    private char value;
+    private int position;
+    private CharacterStyle style; // 共享的样式对象
+    
+    public Character(char value, int position, CharacterStyle style) {
+        this.value = value;
+        this.position = position;
+        this.style = style; // 引用共享的样式
+    }
+}
+````
+如果没有享元模式：
+
+文档中每个字符都创建完整的样式对象
+
+内存使用：1000个字符 × 每个样式对象 = 1000个对象
+
+使用享元模式后：
+
+只有几种不同的样式对象被共享
+
+内存使用：1000个字符 + 5种样式 = 1005个对象（大大减少）
+
+例子2：游戏开发
+
+````
+// 共享的树木类型（内在状态）
+class TreeType {
+    private String name;
+    private String texture;
+    private String color;
+    
+    public TreeType(String name, String texture, String color) {
+        this.name = name;
+        this.texture = texture;
+        this.color = color;
+    }
+    
+    public void draw(int x, int y) {  // x,y是外在状态
+        System.out.println("在位置(" + x + "," + y + ")绘制" + name);
+    }
+}
+
+// 树木工厂 - 确保共享
+class TreeFactory {
+    private static Map<String, TreeType> treeTypes = new HashMap<>();
+    
+    public static TreeType getTreeType(String name, String texture, String color) {
+        String key = name + texture + color;
+        if (!treeTypes.containsKey(key)) {
+            treeTypes.put(key, new TreeType(name, texture, color));
+        }
+        return treeTypes.get(key);
+    }
+}
+````
+问题：当需要创建大量相似对象时，直接创建会导致：
+
+内存占用过高
+
+创建和销毁开销大
+
+解决方案：享元模式
+
+共享不变的部分（内在状态）
+
+分离变化的部分（外在状态）
+
+通过工厂管理共享
+
+### 代理模式
+场景：用门禁卡开门
+
+* 基本功能：门的本质功能就是"打开"
+
+* 额外功能：但现代门禁系统增加了：
+
+    * 访问控制（access card）
+
+    * 安全绕过按钮（bypass button）
+
+* 代理的作用：在"开门"这个基本功能之上，添加了额外的功能层
+````
+// 1. 首先定义门的核心接口
+interface Door {
+    void open();
+    void close();
+}
+
+// 2. 实现基本的门功能
+class LabDoor implements Door {
+    public void open() {
+        System.out.println("打开实验室的门");
+    }
+    
+    public void close() {
+        System.out.println("关闭实验室的门");
+    }
+}
+
+// 3. 代理类 - 在基本功能上添加安全控制
+class SecuredDoor {
+    private Door door;
+    
+    public SecuredDoor(Door door) {
+        this.door = door;
+    }
+    
+    public void open(String password) {
+        if (authenticate(password)) {
+            door.open();  // 调用原始功能
+        } else {
+            System.out.println("访问被拒绝！密码错误");
+        }
+    }
+    
+    public void openWithCard(String cardNumber) {
+        if (validateCard(cardNumber)) {
+            door.open();  // 调用原始功能
+        } else {
+            System.out.println("门禁卡无效！");
+        }
+    }
+    
+    public void openWithButton() {
+        System.out.println("使用安全绕过按钮开门");
+        door.open();  // 调用原始功能
+    }
+    
+    private boolean authenticate(String password) {
+        return "secret".equals(password);
+    }
+    
+    private boolean validateCard(String cardNumber) {
+        return cardNumber.startsWith("ACME-");
+    }
+    
+    public void close() {
+        door.close();
+    }
+}
+
+// 4. 使用示例
+public class ProxyExample {
+    public static void main(String[] args) {
+        // 创建带安全代理的门
+        SecuredDoor securedDoor = new SecuredDoor(new LabDoor());
+        
+        // 尝试不同的开门方式
+        securedDoor.open("wrong");        // 访问被拒绝！密码错误
+        securedDoor.open("secret");       // 打开实验室的门
+        
+        securedDoor.openWithCard("INVALID"); // 门禁卡无效！
+        securedDoor.openWithCard("ACME-123"); // 打开实验室的门
+        
+        securedDoor.openWithButton();     // 使用安全绕过按钮开门
+                                          // 打开实验室的门
+    }
+}
+````
+代理模式的核心思想
+1. 不改变原有功能
+
+    * 门的核心功能 open() 保持不变
+
+    * 只是在原有功能基础上添加新的控制层
+
+2. 添加额外功能
+
+    代理可以添加：
+
+    * 访问控制（验证权限）
+
+    * 日志记录（记录谁什么时候开门）
+
+    * 缓存（缓存验证结果）
+
+    * 延迟加载（需要时才初始化复杂对象）
+
+3. 透明性
+
+   对于使用门的代码来说：
+
+    * 它仍然是在"开门"
+
+    * 但背后多了安全检查的逻辑
+
+核心观点：
+
+在核心功能之上添加额外的控制层
+
+详细解析：
+
+1. 核心功能 vs 附加功能
+   核心功能：门的基本作用就是"打开"
+
+附加功能：访问控制、安全验证、绕过机制等
+
+关系：附加功能建立在核心功能之上，但不改变核心功能本身
+
+2. 代理模式的作用
+   就像现实中的门禁系统：
+
+原始对象：普通的门（只有开门功能）
+
+代理对象：门禁系统（在开门前先进行验证）
+
+3. 关键特性
+   透明性：用户感觉还是在"开门"，不知道背后有复杂的验证过程
+
+增强性：在不修改原始门的情况下，增加了安全控制
+
+灵活性：提供多种开门方式（门禁卡、按钮绕过等）
+
+代理模式价值：
+
+单一职责：门只负责"开/关"，安全验证由代理处理
+
+开闭原则：可以轻松添加新的验证方式，而不修改原始门类
+
+代码复用：同一个安全代理可以用于不同类型的门[SecuredDoor的实例变量private Door door]
+
+现实世界中的其他代理例子
+1. 网络代理：在访问网站时添加缓存、过滤
+2. 虚拟代理：图片加载时先显示缩略图
+3. 保护代理：控制对敏感对象的访问权限
+4. 智能引用：统计对象使用次数，自动清理
+5. 银行卡：代理了你访问银行金库的权限
+6. 网页缓存：代理了原始服务器的内容访问
+7. 防火墙：代理了网络连接的访问控制
+
+## 行为型模式
+核心关注点
+
+* 关注对象之间的职责分配
+
+* 解决"哪个对象应该负责什么行为"的问题
+
+与结构型模式的区别
+
+* 结构型模式：关注对象的组成和结构（静态关系）
+
+* 行为型模式：关注对象间的通信和协作（动态交互）
+
+核心问题
+
+* 如何在一个软件组件中执行行为？
+
+* 关注行为的执行方式、时机和协作
+
+行为型模式的特点
+
+* 对象间的协作：定义对象如何相互通信
+
+* 职责分配：明确每个对象的责任范围
+
+* 算法封装：将复杂算法封装在对象中
+
+* 通信模式：标准化对象间的交互方式
+
+具体模式示例
+1. 观察者模式（Observer）
+````
+   // 定义对象间的一对多依赖关系
+   interface Subject {
+        void attach(Observer observer);
+        void notifyObservers();
+   }
+
+    interface Observer {
+        void update(String message);
+    }
+
+    // 当一个对象状态改变时，所有依赖它的对象都得到通知
+````
+2. 策略模式（Strategy）
+````
+   // 定义算法族，分别封装起来，使它们可以互相替换
+   interface PaymentStrategy {
+        void pay(int amount);
+   }
+
+    class CreditCardPayment implements PaymentStrategy {
+        public void pay(int amount) {
+            System.out.println("信用卡支付: " + amount);
+        }
+    }
+    
+    class PayPalPayment implements PaymentStrategy {
+        public void pay(int amount) {
+            System.out.println("PayPal支付: " + amount);
+        }
+    }
+````
+3. 命令模式（Command）
+````
+   // 将请求封装为对象，以便使用不同的请求、队列或日志来参数化其他对象
+   interface Command {
+        void execute();
+   }
+
+    class LightOnCommand implements Command {
+        private Light light;
+
+        public LightOnCommand(Light light) {
+            this.light = light;
+        }
+    
+        public void execute() {
+            light.turnOn();  // 职责分配：命令对象负责执行具体操作
+        }
+    }
+````
+4. 责任链模式（Chain of Responsibility）
+````
+   // 为请求创建一系列接收者对象链
+   abstract class Handler {
+       protected Handler next;
+
+       public void setNext(Handler next) {
+       this.next = next;
+       }
+
+       public abstract void handleRequest(Request request);
+   }
+
+   // 每个处理器决定是否处理请求或传递给下一个
+````
+行为型模式 vs 结构型模式
+好的，我将把图片中的内容转化为 Markdown 表格。
+
+| 方面 | 结构型模式 | 行为型模式 |
+| :--- | :--- | :--- |
+| **关注点** | 对象组合和结构 | 对象交互和职责分配 |
+| **关系** | 静态的"has-a"关系 | 动态的"communicates-with"关系 |
+| **时间维度** | 编译时确定的结构 | 运行时确定的交互 |
+| **例子** | 适配器、装饰器、外观 | 观察者、策略、命令 |
+
+核心要点解析
+1. "identify common communication patterns between objects"
+   （识别对象间常见的通信模式）
+
+行为型模式不是凭空创造的，而是从大量实际软件设计中总结出来的重复出现的通信解决方案
+
+比如：一个对象状态改变需要通知其他多个对象（观察者模式）
+
+2. "realize these patterns"
+   （实现这些模式）
+
+将这些通用的通信方案具体化为可重用的设计模板
+
+提供标准的代码结构和实现方式
+
+3. "increase flexibility in carrying out this communication"
+   （提高进行这种通信的灵活性）
+
+这是行为型模式的核心价值
+
+让对象间的通信更加灵活、可维护、可扩展
+
+具体理解
+什么是"通信模式"？
+指的是对象之间相互传递消息、调用方法、协作完成任务的标准化方式。
+
+为什么需要识别和标准化？
+java
+// 没有使用设计模式 - 紧耦合的通信
+class User {
+private EmailService emailService;
+private SMSService smsService;
+private NotificationService notificationService;
+
+    public void register() {
+        // 直接调用多个服务 - 通信方式僵硬
+        emailService.sendWelcomeEmail();
+        smsService.sendVerificationSMS();
+        notificationService.addToQueue();
+    }
+}
+
+// 使用观察者模式 - 灵活的通信
+class User {
+private List<Observer> observers = new ArrayList<>();
+
+    public void register() {
+        // 统一的通信接口 - 灵活扩展
+        notifyObservers("user_registered");
+    }
+    
+    public void addObserver(Observer observer) {
+        observers.add(observer); // 可动态添加新的通信对象
+    }
+}
+行为型模式如何提高灵活性？
+1. 解耦通信对象
+   java
+   // 命令模式：将请求发送者与接收者解耦
+   interface Command {
+   void execute();
+   }
+
+// 发送者不需要知道具体的接收者
+class Invoker {
+private Command command;
+public void setCommand(Command command) {
+this.command = command; // 可以灵活切换不同的命令
+}
+public void executeCommand() {
+command.execute(); // 统一的通信接口
+}
+}
+2. 动态改变行为
+   java
+   // 策略模式：运行时切换算法
+   class PaymentProcessor {
+   private PaymentStrategy strategy;
+
+   public void setStrategy(PaymentStrategy strategy) {
+   this.strategy = strategy; // 动态改变支付策略
+   }
+
+   public void processPayment(int amount) {
+   strategy.pay(amount); // 统一的通信方式
+   }
+   }
+3. 简化复杂通信
+   java
+   // 中介者模式：将多对多通信简化为一对多
+   class ChatRoom { // 中介者
+   public void sendMessage(User user, String message) {
+   // 集中处理所有用户间的通信
+   System.out.println(user.getName() + ": " + message);
+   }
+   }
+
+// 用户之间不直接通信，都通过中介者
+总结
+这段话精确定义了行为型设计模式的：
+
+起源：从实践中总结的通用通信方案
+
+本质：标准化的对象交互模板
+
+价值：提高通信的灵活性，让系统更容易适应变化
+
+关键收获：行为型模式让我们的代码不是"硬编码"的对象通信，而是提供了一套可配置、可扩展、可维护的交互框架，这正是软件设计追求的核心目标之一。
+
+### 责任链模式
+核心概念
+
+场景描述：
+
+* 三个支付账户：A($100), B($300), C($1000)
+
+* 支付优先级：A → B → C
+
+* 购买金额：$210
+
+* 支付过程：按顺序检查每个账户是否能支付
+
+支付过程演示
+
+第一步：检查账户A
+````
+// A账户有$100，需要$210
+if (100 >= 210) {  // false
+// 支付失败，转到下一个账户
+}
+````
+第二步：检查账户B
+````
+java
+// B账户有$300，需要$210
+if (300 >= 210) {  // true
+// 支付成功！从B账户扣除$210
+// 责任链终止，不再检查C账户
+}
+````
+结果：
+使用账户B完成支付
+
+账户A：跳过（余额不足）
+
+账户C：未检查（链已终止）
+
+核心概念分解
+
+1. （构建对象链）
+
+* 将多个处理对象连接成一条"链"
+
+* 每个对象都知道它的下一个对象是谁
+
+````
+// 对象A → 对象B → 对象C
+handlerA.setNext(handlerB);
+handlerB.setNext(handlerC);
+````
+2. 请求从一端进入
+* 请求只从链的第一个对象开始
+
+* 客户端不需要知道链的具体结构
+````
+// 请求只发给链的开头
+handlerA.handleRequest(request);
+````
+3. 在对象间持续传递
+* 如果当前对象不能处理，就传给下一个
+
+* 请求在链上"旅行
+````
+public void handleRequest(Request request) {
+    if (canHandle(request)) {
+        // 处理请求
+    } else if (next != null) {
+        // 传给下一个对象
+        next.handleRequest(request);
+    }
+}
+````
+4. 直到找到合适的处理
+* 链中第一个能处理该请求的对象会"拦截"它
+
+* 处理完成后，传递停止
+
+直观比喻
+
+就像公司审批流程：
+
+员工申请 → 项目经理 → 部门总监 → CEO
+
+* 请求：报销申请
+
+* 链：员工 → 经理 → 总监 → CEO
+
+* 过程：申请从员工开始，逐级向上传递
+
+* 结果：在某个级别获得批准（找到合适的处理器）
+````
+// 抽象处理器
+abstract class Handler {
+    protected Handler next;
+    
+    public void setNext(Handler next) {
+        this.next = next;
+    }
+    
+    public void handle(Request request) {
+        if (canHandle(request)) {
+            process(request);      // 处理请求
+        } else if (next != null) {
+            next.handle(request);  // 传递给下一个
+        } else {
+            System.out.println("没有人能处理这个请求");
+        }
+    }
+    
+    protected abstract boolean canHandle(Request request);
+    protected abstract void process(Request request);
+}
+
+// 具体处理器
+class ConcreteHandlerA extends Handler {
+    protected boolean canHandle(Request request) {
+        return request.getType().equals("A");
+    }
+    
+    protected void process(Request request) {
+        System.out.println("HandlerA 处理了请求");
+    }
+}
+
+class ConcreteHandlerB extends Handler {
+    protected boolean canHandle(Request request) {
+        return request.getType().equals("B");
+    }
+    
+    protected void process(Request request) {
+        System.out.println("HandlerB 处理了请求");
+    }
+}
+
+// 使用
+public class Main {
+    public static void main(String[] args) {
+        // 构建链：A → B
+        Handler handlerA = new ConcreteHandlerA();
+        Handler handlerB = new ConcreteHandlerB();
+        handlerA.setNext(handlerB);
+        
+        // 发送请求
+        Request request1 = new Request("B");
+        handlerA.handle(request1); 
+        // 输出：HandlerB 处理了请求（A不能处理，传给B，B处理）
+        
+        Request request2 = new Request("A");
+        handlerA.handle(request2);
+        // 输出：HandlerA 处理了请求（A直接处理）
+    }
+}
+````
+关键优势
+* 解耦：发送者不知道最终由谁处理
+
+
+
+* 灵活：可以动态调整链的顺序
+
+* 可扩展：容易添加新的处理器
+
+* 单一职责：每个处理器只关心自己能处理的任务
+
+总结：
+这句话描述的责任链模式就像一条"处理流水线"——请求从入口进入，在处理器链上流动，直到找到能处理它的那个处理器为止。这种设计让系统更加灵活和可维护。
+
+### 命令模式
+命令模式包含四个关键角色，用餐厅例子来解释：
+
+1.Client(客户) - 您
+* 发出命令的发起者
+* 知道需要什么，但不直接执行
+
+2.Invoker(调用者) - 服务员/遥控器
+* 接收命令并转发
+* 不关心命令的具体内容，只是传递
+
+3.Command（命令） - 点餐内容/开机指令
+* 封装了具体的操作请求
+* 包含所有执行所需的信息
+
+4.Receiver（接收者） - 厨师/电视机
+* 真正执行命令的对象
+* 拥有执行命令所需的知识和能力
+
+命令模式的价值
+
+1.  解耦
+* 客户不需要知道具体的执行细节
+
+    客户指客户端，第一个例子中的RestaurantClient，第二个例子中的TVClient
+
+* 调用者不需要知道命令的具体内容
+
+    调用者指：第一个例子中的Waiter，第二个例子中的RemoteControl
+
+* 接收者不需要知道谁发起的请求
+
+    接收者指：第一个例子中的Chef，第二个例子中的Television
+
+2. 支持撤销/重做
+````
+interface Command {
+    void execute();
+    void undo(); // 可以添加撤销功能
+}
+````
+3. 支持命令队列和日志
+````
+// 可以保存命令历史
+class CommandManager {
+    private List<Command> history = new ArrayList<>();
+    
+    public void executeCommand(Command cmd) {
+        cmd.execute();
+        history.add(cmd); // 记录命令历史
+    }
+}
+````
+4. 支持宏命令
+````
+// 组合多个命令
+class MacroCommand implements Command {
+    private List<Command> commands = new ArrayList<>();
+    
+    public void addCommand(Command cmd) {
+        commands.add(cmd);
+    }
+    
+    public void execute() {
+        for (Command cmd : commands) {
+            cmd.execute(); // 依次执行多个命令
+        }
+    }
+}
+````
+
+
 
 
 

@@ -1449,9 +1449,390 @@ class MacroCommand implements Command {
     }
 }
 ````
+### 
+核心概念
+
+迭代器模式提供一种方法**顺序访问一个聚合对象中的各个元素，而又不暴露该对象的内部表示**。
+
+迭代器模式的关键特点：
+
+1. 统一访问接口
+````
+interface Iterator<T> {
+    boolean hasNext();
+    T next();
+    // 可选：hasPrevious(), previous(), reset() 等
+}
+````
+2. 与数据结构的解耦
+
+    客户端不需要指定数据的存储方式（数组、列表、树等），只需要使用迭代器接口。
+
+3. 支持多种遍历方式
+* 顺序遍历
+* 逆序遍历
+* 随机访问
+* 条件遍历
+
+4. 多个迭代器可以同时遍历同一个集合
+* 多个迭代器可以同时遍历同一个集合。
 
 
+迭代器模式的价值
 
+* 简化客户端代码：客户端只需要调用简单的 next(), hasNext() 方法
 
+* 数据封装：隐藏了聚合对象的内部结构
 
+* 多种遍历支持：可以轻松实现不同的遍历算法
 
+* 开闭原则：可以添加新的迭代器而不修改聚合类
+
+迭代器模式的角色：
+
+* Iterator,比如first中的ExtendedIterator，它定义了遍历接口
+* ConcreteIterator,具体遍历器，例如first中的RadioIterator，它负责具体的遍历逻辑【它里面持有要遍历的数组或集合】。
+* Aggregate,聚合对象，例如first中的Radio,它是创建迭代器的工厂。
+
+结构：
+集成对象（Radio）中有一个变量是遍历器。
+遍历器中有一个数组或集合。
+
+### 中介者模式
+比较难理解
+
+### 备忘录模式
+核心概念：
+
+备忘录模式在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，以便以后可以将该对象恢复到原先保存的状态。
+
+备忘录模式的关键特点
+
+1. 三个核心角色：
+
+Originator（发起人）：创建备忘录，保存和恢复状态
+
+Memento（备忘录）：存储发起人的内部状态
+
+Caretaker（管理者）：保存和管理备忘录，但不操作或检查其内容
+
+2. 封装性保护
+````
+// 备忘录内部状态是只读的，保护了封装性
+class CalculatorMemento {
+    private final double result;  // final确保状态不可变
+    private final String operation;
+    
+    // 只有getter，没有setter
+    public double getResult() { return result; }
+}
+````
+3. 状态管理策略
+栈式管理：支持撤销/重做
+
+列表管理：支持历史记录浏览
+
+选择性保存：只保存必要状态，避免内存浪费
+
+核心概念分解：
+1. （捕获和存储对象的当前状态）
+* 指的是保存对象在某个时间点的完整状态
+* 就像给对象拍一张"快照"
+````
+// 备忘录 - 存储对象状态
+class Memento {
+    // 备忘录内部状态是私有的，保护了封装性
+    private final String state; // 私有，无法从外部修改
+    
+    public Memento(String stateToSave) {
+        this.state = stateToSave;  // 捕获并存储状态
+    }
+    
+    // 只提供获取方法，不提供设置方法
+    public String getSavedState() {
+        return state;
+    }
+}
+````
+2. （以便以后能够恢复）
+* 保存的状态要能够完整还原
+* 就像从快照恢复系统
+````
+// 发起人 - 可以保存和恢复状态
+class Originator {
+    private String state;
+    
+    // 保存状态到备忘录
+    public Memento save() {
+        return new Memento(this.state);  // 捕获当前状态
+    }
+    
+    // 从备忘录恢复状态
+    public void restore(Memento memento) {
+        this.state = memento.getSavedState();  // 恢复之前的状态
+    }
+}
+````
+3. （以平滑的方式）
+* 恢复过程应该无缝、简单
+* 用户不需要了解内部复杂逻辑
+````
+// 恢复过程对用户是透明的
+public void restore(Memento memento) {
+    this.state = memento.getState();  // 一键恢复
+    // 用户不需要知道具体如何恢复
+}
+````
+4. 时间点捕获
+````
+// 可以在任何时间点保存状态
+EditorMemento snapshot1 = editor.save();  // 时间点1
+editor.type("一些内容");
+EditorMemento snapshot2 = editor.save();  // 时间点2
+````
+现实世界应用场景
+
+* 文本编辑器：撤销/重做功能(文档版本控制)
+````
+// 类似Git的提交
+DocumentVersion version1 = document.commit();  // 保存版本1
+document.edit();
+DocumentVersion version2 = document.commit();  // 保存版本2
+document.revertTo(version1);                   // 恢复到版本1
+````
+
+* 游戏存档：保存游戏进度
+````
+// 保存游戏进度
+GameSave savedGame = game.save();    // 捕获当前游戏状态
+// 之后可以...
+game.load(savedGame);                // 平滑恢复到保存的状态
+````
+
+* 数据库事务：回滚操作
+````
+// 数据库事务
+TransactionSnapshot snapshot = database.beginTransaction();
+// 执行一些操作...
+database.rollback(snapshot);  // 平滑回滚到事务开始状态
+````
+
+* 表单编辑：保存草稿状态
+
+总结
+这段话精确定义了备忘录模式的本质：
+
+捕获状态：像拍照一样记录对象当前状态
+
+存储状态：将状态安全地保存在备忘录对象中
+
+恢复能力：以后可以随时恢复到保存的状态
+
+平滑体验：整个过程对用户简单无缝
+
+核心价值：提供了一种状态保存和恢复的标准化机制，让对象能够"回到过去"，这是实现撤销操作、事务回滚、游戏存档等功能的基础。
+
+### 观察者模式
+核心思想：
+
+它描述了一种设计规则，让多个对象（依赖者）能够自动监听另一个对象（目标对象）的变化。
+
+拆解分析：
+1. (在对象之间定义一种依赖关系)
+   这指的是建立一种“监听”或“关注”的关系。就像求职者“依赖”招聘网站来获取新职位信息。
+2. (每当一个对象改变其状态时)
+   “状态改变”就是核心事件。比如：
+   * 招聘网站新增了一个职位。
+   * 天气预报数据更新了。
+   * 一个开关被从“关”拨到“开”。
+3. (它的所有依赖者都会得到通知)
+   这是自动化的结果。一旦第2步发生，系统会自动触发通知流程，告诉所有关注这个变化的对象，而不是依赖每个依赖者不停地去手动检查。
+   * 所有订阅了该类型职位的求职者收到一封邮件。
+   * 所有显示天气的App界面自动更新温度。
+   * 所有连接这个开关的灯泡同时亮起或熄灭。
+
+对观察者模式的正式、技术性定义
+1. (一个对象，称为“主体”)
+   
+这是被观察的核心对象，是事件或状态变化的源头。
+
+2. (维护一个它的依赖者列表，这些依赖者称为“观察者”)
+
+这是模式实现的关键。主体对象内部有一个“花名册”（比如一个数组或列表），专门用来记录所有想关注它变化的对象。
+
+例子：招聘网站有一个数据库表，存储了所有求职者的联系方式；微信公众号的服务器上有一个列表，记录了所有关注了该号的用户。
+
+3. (在状态发生变化时自动通知它们)
+
+当主体自身的状态发生改变时（比如有新数据了），它不会坐等别人来问，而是会主动地、自动地去通知“花名册”上的每一位。
+
+4. (通常是通过调用观察者的某一个方法)
+
+这是最技术性的部分，它说明了“通知”这个动作在代码里是如何执行的。
+
+主体对象会遍历它的“观察者列表”，然后对列表里的每一个观察者对象，统一调用一个事先约定好的方法。这个方法通常被命名为 update(), onNotify(), handleEvent() 等。
+
+结合整个过程的代码级比喻：
+
+想象一个 WeatherStation (气象站，即Subject主体) 和多个 PhoneDisplay (手机天气App，即Observer观察者)。
+
+1. 建立列表 (Maintains a list)：
+
+WeatherStation 内部有一个私有变量 List<PhoneDisplay> observers = new ArrayList<>();
+
+2. 观察者订阅 (Adding observers)：
+
+你的手机App安装后，你点击了“关注XX气象站”。代码层面就是执行了：
+````
+weatherStation.addObserver(myPhoneDisplay);
+````
+这样，你的 myPhoneDisplay 对象就被加入了气象站的 observers 列表。
+3. 状态改变 (State changes)：
+
+气象站检测到温度从20°C变成了21°C。
+
+4. 自动通知 (Notifies automatically)：
+
+气象站内部的代码会立刻执行一个通知流程，类似于:
+````
+for (PhoneDisplay observer : this.observers) {
+    observer.update(newTemperature); // <-- 这里就是“调用它们的方法”
+}
+````
+它遍历整个列表，对每一个观察者都调用它们的 update 方法，并把新温度作为参数传过去。
+
+5. 观察者响应 (Observers react)：
+
+每个 PhoneDisplay 对象的 update 方法被调用后，它内部的代码就会执行，比如刷新屏幕上的温度显示。
+
+### 访问者模式
+核心思想：不修改原有类，却能扩展新功能
+
+传统方式的局限：
+
+假设你有一个图像类体系：
+
+````
+class Circle {
+    private double radius;
+    // 已有方法...
+}
+
+class Rectangle {
+    private double width, height;
+    // 已有方法...
+}
+````
+现在你想添加新功能：
+* 计算面积
+* 导出为XML
+* 绘制到画布
+
+没有访问者模式时，你需要在每个类里添加新方法：
+````
+class Circle {
+    // 必须修改原有类！
+    public double calculateArea() { /* ... */ }
+    public String toXML() { /* ... */ }
+    public void draw(Canvas canvas) { /* ... */ }
+}
+
+class Rectangle {
+    // 必须修改原有类！
+    public double calculateArea() { /* ... */ }
+    public String toXML() { /* ... */ }
+    public void draw(Canvas canvas) { /* ... */ }
+}
+````
+问题：每次有新功能都要修改所有相关类，违反开闭原则。
+
+访问者模式的解决方案
+````
+// 1. 不修改原有图形类
+class Circle {
+    private double radius;
+    
+    // 只添加这个接受访问者的方法
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+}
+
+class Rectangle {
+    private double width, height;
+    
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+}
+
+// 2. 通过访问者添加新操作
+interface Visitor {
+    void visit(Circle circle);
+    void visit(Rectangle rectangle);
+}
+
+// 面积计算器 - 新增功能，不修改原有类
+class AreaCalculator implements Visitor {
+    public void visit(Circle circle) {
+        // 计算圆形面积
+        double area = Math.PI * circle.getRadius() * circle.getRadius();
+    }
+    
+    public void visit(Rectangle rectangle) {
+        // 计算矩形面积
+        double area = rectangle.getWidth() * rectangle.getHeight();
+    }
+}
+
+// XML导出器 - 另一个新功能，不修改原有类
+class XMLExporter implements Visitor {
+    public void visit(Circle circle) {
+        // 导出圆形为XML
+    }
+    
+    public void visit(Rectangle rectangle) {
+        // 导出矩形为XML
+    }
+}
+````
+使用方式
+````
+// 创建图形对象
+Circle circle = new Circle(5);
+Rectangle rectangle = new Rectangle(3, 4);
+
+// 添加新功能而不修改图形类
+AreaCalculator areaCalc = new AreaCalculator();
+XMLExporter xmlExporter = new XMLExporter();
+
+// 应用新操作
+circle.accept(areaCalc);    // 计算面积
+circle.accept(xmlExporter); // 导出XML
+
+rectangle.accept(areaCalc);    // 计算面积  
+rectangle.accept(xmlExporter); // 导出XML
+````
+关键优势：
+
+1. 符合开闭原则
+* 对扩展开放：可以随意添加新的Visitor实现
+* 对修改封闭：不需要修改现有的图形类
+2. 相关操作集中管理
+* 所有面积计算逻辑在AreaCalculator中
+* 所有XML导出逻辑在XMLExporter中
+3. 添加新功能很容易
+````
+// 想要添加JSON导出功能？只需：
+class JSONExporter implements Visitor {
+    void visit(Circle circle) { /* JSON逻辑 */ }
+    void visit(Rectangle rectangle) { /* JSON逻辑 */ }
+}
+// 不需要修改Circle、Rectangle类！
+````
+适用场景：
+* 需要对一个复杂对象结构添加很多不同操作
+* 对象结构比较稳定，但经常需要添加新操作
+* 希望将相关操作组织在一起
+
+这就是"不修改对象却能添加操作"的精髓 - 通过访问者模式，你可以在不触碰原有类代码的情况下，无限扩展新的功能和行为。

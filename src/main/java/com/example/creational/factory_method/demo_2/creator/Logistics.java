@@ -1,6 +1,6 @@
-package com.example.creational.factory_method.second.creator;
+package com.example.creational.factory_method.demo_2.creator;
 
-import com.example.creational.factory_method.second.product.Transport;
+import com.example.creational.factory_method.demo_2.product.Transport;
 
 public abstract class Logistics {
     // 工厂方法

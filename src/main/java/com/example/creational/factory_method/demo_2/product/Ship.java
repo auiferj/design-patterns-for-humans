@@ -1,4 +1,4 @@
-package com.example.creational.factory_method.second.product;
+package com.example.creational.factory_method.demo_2.product;
 
 /**
  * 具体产品B

@@ -1,4 +1,4 @@
-package com.example.creational.factory_method.third;
+package com.example.creational.factory_method.demo_3;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;

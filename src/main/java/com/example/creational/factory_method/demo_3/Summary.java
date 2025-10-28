@@ -1,6 +1,4 @@
-package com.example.creational.factory_method.third;
-
-import lombok.Data;
+package com.example.creational.factory_method.demo_3;
 
 import java.util.Date;
 public class Summary {

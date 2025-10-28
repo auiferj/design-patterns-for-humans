@@ -1,13 +1,13 @@
-package com.example.creational.factory_method.first;
+package com.example.creational.factory_method.demo_1;
 
-import com.example.creational.factory_method.first.manager.DevelopmentManager;
-import com.example.creational.factory_method.first.manager.HiringManager;
-import com.example.creational.factory_method.first.manager.MarketingManager;
+import com.example.creational.factory_method.demo_1.manager.DevelopmentManager;
+import com.example.creational.factory_method.demo_1.manager.HiringManager;
+import com.example.creational.factory_method.demo_1.manager.MarketingManager;
 
 /**
  * 工厂方法模式
  */
-public class FactoryMethodExample {
+public class ZApp {
     public static void main(String[] args) {
         HiringManager devManager = new DevelopmentManager();
         devManager.takeInterview(); // Output: Asking about design patterns!

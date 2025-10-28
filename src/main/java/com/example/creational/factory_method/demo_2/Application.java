@@ -1,8 +1,8 @@
-package com.example.creational.factory_method.second;
+package com.example.creational.factory_method.demo_2;
 
-import com.example.creational.factory_method.second.creator.Logistics;
-import com.example.creational.factory_method.second.creator.RoadLogistics;
-import com.example.creational.factory_method.second.creator.SeaLogistics;
+import com.example.creational.factory_method.demo_2.creator.Logistics;
+import com.example.creational.factory_method.demo_2.creator.RoadLogistics;
+import com.example.creational.factory_method.demo_2.creator.SeaLogistics;
 
 public class Application {
     public static void main(String[] args) {

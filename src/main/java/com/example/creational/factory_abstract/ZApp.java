@@ -9,7 +9,7 @@ import com.example.creational.factory_abstract.profession.DoorFittingExpert;
 /**
  * 抽象工厂模式
  */
-public class AbstractFactoryExample {
+public class ZApp {
     public static void main(String[] args) {
         // 木门工厂
         DoorFactory woodenFactory = new WoodenDoorFactory();

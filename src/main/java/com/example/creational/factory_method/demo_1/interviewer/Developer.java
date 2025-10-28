@@ -1,7 +1,8 @@
-package com.example.creational.factory_method.first.interviewer;
+package com.example.creational.factory_method.demo_1.interviewer;
 
 /**
- * 开发
+ * 开发面试官
+ * 角色：具体产品
  */
 public class Developer implements Interviewer {
     @Override

@@ -3,7 +3,7 @@ package com.example.creational.factory_simple;
 /**
  * 简单工厂
  */
-public class Main {
+public class ZApp {
     public static void main(String[] args) {
         // Make me a door of 100x200
         Door door = DoorFactory.createDoor(DoorType.WOODEN ,100.0f, 200.0f);

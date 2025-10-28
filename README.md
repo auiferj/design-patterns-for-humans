@@ -1,17 +1,17 @@
 ### 设计模式分类
 
 | **创建型设计模式 (Creational Design Patterns)** | **结构型设计模式 (Structural Design Patterns)** | **行为型设计模式 (Behavioral Design Patterns)** |
-| :--- | :--- | :--- |
-| Simple Factory | Adapter | Chain of Responsibility |
-| Factory Method | Bridge | Command |
-| Abstract Factory | Composite | Iterator |
-| Builder | Decorator | Mediator |
-| Prototype | Facade | Memento |
-| Singleton | Flyweight | Observer |
-| | Proxy | Visitor |
-| | | Strategy |
-| | | State |
-| | | Template Method |
+|:-----------------------------------------|:-----------------------------------------|:-----------------------------------------|
+| Simple Factory（简单工程）                     | Adapter（适配器）                             | Chain of Responsibility（责任链）             |
+| Factory Method（工厂方法）                     | Bridge                                   | Command                                  |
+| Abstract Factory（抽象工厂）                   | Composite                                | Iterator                                 |
+| Builder（创建者）                             | Decorator                                | Mediator                                 |
+| Prototype（原型）                            | Facade                                   | Memento                                  |
+| Singleton（单例）                            | Flyweight                                | Observer                                 |
+|                                          | Proxy                                    | Visitor                                  |
+|                                          |                                          | Strategy                                 |
+|                                          |                                          | State                                    |
+|                                          |                                          | Template Method                          |
 
 ### 简单工厂
 简单工厂模式只是为客户端生成一个实例，而不向客户端暴露任何实例化的逻辑。
@@ -19,36 +19,36 @@
 当创建一个对象不仅仅是简单的赋值操作，而是涉及一些业务逻辑时，将其放在专门的工厂中比在每个需要的地方重复相同的代码更有意义。
 1. "不仅仅是简单的赋值"
 ```
-    // 简单赋值 - 不需要工厂
-    User user = new User();
-    user.setName("John");
-    user.setAge(25);
+// 简单赋值 - 不需要工厂
+User user = new User();
+user.setName("John");
+user.setAge(25);
 ```
 2. "涉及一些逻辑" - 需要工厂的情况
 ```
-    // 复杂创建逻辑 - 需要工厂
-    public User createUser(String input) {
-        User user = new User();
-        
-        // 业务逻辑1：姓名处理
-        if (input.contains("@")) {
-            user.setName(input.split("@")[0]);
-        } else {
-            user.setName(input);
-        }
-        
-        // 业务逻辑2：年龄验证
-        user.setAge(calculateAge(birthDate));
-        if (user.getAge() < 18) {
-            throw new IllegalArgumentException("用户必须年满18岁");
-        }
-        
-        // 业务逻辑3：默认值设置
-        user.setStatus("active");
-        user.setCreatedAt(LocalDateTime.now());
-        
-        return user;
+// 复杂创建逻辑 - 需要工厂
+public User createUser(String input) {
+    User user = new User();
+    
+    // 业务逻辑1：姓名处理
+    if (input.contains("@")) {
+        user.setName(input.split("@")[0]);
+    } else {
+        user.setName(input);
     }
+    
+    // 业务逻辑2：年龄验证
+    user.setAge(calculateAge(birthDate));
+    if (user.getAge() < 18) {
+        throw new IllegalArgumentException("用户必须年满18岁");
+    }
+    
+    // 业务逻辑3：默认值设置
+    user.setStatus("active");
+    user.setCreatedAt(LocalDateTime.now());
+    
+    return user;
+}
 ```
 3. 为什么需要工厂模式：
 
@@ -103,6 +103,7 @@
         }
     }
 ```
+---
 ### 工厂方法
 工厂：负责创建对象的地方。
 
@@ -1836,3 +1837,392 @@ class JSONExporter implements Visitor {
 * 希望将相关操作组织在一起
 
 这就是"不修改对象却能添加操作"的精髓 - 通过访问者模式，你可以在不触碰原有类代码的情况下，无限扩展新的功能和行为。
+
+### 策略模式
+问题演进过程：
+
+第一个阶段：简单需求
+
+````
+// 最初只需要一种排序算法
+class Sorter {
+    public void sort(int[] data) {
+        // 使用冒泡排序
+        bubbleSort(data);
+    }
+}
+````
+问题：当数据量增大时，冒泡排序(O(n²))变得非常慢
+
+第二阶段：性能优化
+
+````
+// 切换到更快的算法
+class Sorter {
+    public void sort(int[] data) {
+        // 改用快速排序
+        quickSort(data);
+    }
+}
+````
+新问题：快速排序(O(n log n))虽然对大数据集很快，但对小数据集：
+* 递归开销较大
+* 可能比简单算法更慢
+
+第三阶段：智能选择（策略模式）
+````
+// 根据数据特征自动选择最佳算法
+class Sorter {
+    public void sort(int[] data) {
+        if (data.length <= 5) {
+            bubbleSort(data);  // 小数据用冒泡排序
+        } else {
+            quickSort(data);   // 大数据用快速排序
+        }
+    }
+}
+````
+这正体现了策略模式的价值
+
+策略模式的核心思想
+````
+// 1. 定义策略接口
+interface SortStrategy {
+    void sort(int[] data);
+}
+
+// 2. 具体策略实现
+class BubbleSortStrategy implements SortStrategy {
+    public void sort(int[] data) {
+        // 冒泡排序实现
+    }
+}
+
+class QuickSortStrategy implements SortStrategy {
+    public void sort(int[] data) {
+        // 快速排序实现
+    }
+}
+
+// 3. 上下文类根据条件选择策略
+class Sorter {
+    private SortStrategy strategy;
+    
+    public void setStrategy(SortStrategy strategy) {
+        this.strategy = strategy;
+    }
+    
+    public void sort(int[] data) {
+        // 自动选择或手动设置策略
+        if (data.length <= 5) {
+            setStrategy(new BubbleSortStrategy());
+        } else {
+            setStrategy(new QuickSortStrategy());
+        }
+        strategy.sort(data);
+    }
+}
+````
+解决的问题
+
+1. 避免"一刀切"的解决方案
+   * 不同场景需要不同算法
+   * 没有一种算法在所有情况下都是最优的
+2. 实现智能的算法选择
+   * 根据数据规模自动选择
+   * 也可以根据数据特征（是否部分有序、数据类型等）选择
+3. 易于扩展
+   * 想要添加新的排序算法（如归并排序）很容易
+   * 不需要修改客户端代码
+
+现实世界的类似例子：
+
+交通工具选择
+````
+// 根据距离选择最佳交通工具
+if (distance < 2) {
+    useWalking();      // 短距离：步行
+} else if (distance < 10) {
+    useCar();          // 中距离：开车
+} else {
+    useAirplane();     // 长距离：飞机
+}
+````
+压缩算法选择
+````
+// 根据文件类型选择压缩算法
+if (file.isText()) {
+    useGzip();         // 文本文件：gzip
+} else if (file.isImage()) {
+    usePNG();          // 图像：PNG压缩
+} else {
+    useLZ4();          // 其他：LZ4快速压缩
+}
+````
+策略模式要解决的核心问题：
+
+在运行时根据上下文条件，动态选择最合适的算法或行为，而不是在编码时写死一种方案。
+
+### 状态模式
+核心比喻解读：
+
+画笔工具 = 上下文对象
+* 你始终使用同一个画笔工具
+* 但它的行为会根据状态而变化
+
+颜色选择 = 状态改变
+* 红色、蓝色、绿色等 = 不同的状态
+* 选择颜色就是改变画笔的状态
+
+绘制行为 = 状态依赖的行为
+* 同样的画笔，同样的绘制动作
+* 但产生的效果（颜色）取决于当前状态
+````
+见代码demo_2
+````
+这体现的状态模式特点
+
+同一操作，不同行为
+* 都是调用 brush.draw()
+* 但根据颜色状态产生不同结果
+
+状态改变 = 行为改变
+* 不需要修改画笔类本身
+* 只需要改变其内部状态
+
+消除条件判断
+
+没有使用状态模式的糟糕写法：
+````
+// 不好的实现 - 充满条件判断
+class Brush {
+    private String color;
+    
+    public void draw(int x, int y) {
+        if ("red".equals(color)) {
+            // 红色绘制逻辑
+        } else if ("blue".equals(color)) {
+            // 蓝色绘制逻辑
+        } else if ("green".equals(color)) {
+            // 绿色绘制逻辑
+        }
+        // ... 每加一种颜色就要修改这里
+    }
+}
+````
+现实中的其他例子
+
+视频播放器
+````
+// 同样的播放按钮，不同状态下的行为：
+播放状态：暂停播放
+暂停状态：开始播放
+停止状态：从头开始播放
+````
+
+电梯系统
+````
+// 同样的"向上"按钮，不同状态下的行为：
+运行状态：忽略请求
+停止状态：开始向上运行
+维护状态：不响应
+````
+网络连接
+````
+// 同样的send()方法：
+连接状态：发送数据
+断开状态：尝试重新连接
+离线状态：缓存数据等待发送
+````
+这个比喻说明了状态模式的核心价值:
+
+让一个对象在其内部状态改变时改变它的行为，使对象看起来似乎修改了它的类。
+* 画笔还是那个画笔
+* 绘制还是那个绘制动作
+* 但行为结果随着状态（颜色）的改变而自动改变
+___
+* 同一个对象
+* 同样的方法调用
+* 但是根据内部状态的不同，产生不同的行为结果
+
+画笔持有状态的引用，app调用画笔的draw方法，draw根据画笔持有的状态，输出不同的颜色。
+
+这就是状态模式的精髓：
+
+过封装状态相关的行为，让对象（Brush）能够根据当前状态（private ColorState currentColor;）动态改变行为（public void draw(int x, int y) {}），而不需要在代码中写满复杂的条件判断语句。
+
+没有状态模式的写法：
+````
+class Order {
+    private String status; // "pending", "paid", "shipped"
+    
+    public void process() {
+        if ("pending".equals(status)) {
+            System.out.println("处理支付...");
+            status = "paid";
+        } else if ("paid".equals(status)) {
+            System.out.println("发货...");
+            status = "shipped";
+        } else if ("shipped".equals(status)) {
+            System.out.println("订单已完成，无法再处理");
+        }
+    }
+}
+````
+问题：大量的if-else语句，难以维护和扩展。
+
+使用状态模式的写法：
+````
+见demo_2
+
+Order的process里面，调用的Order的process,而Order的process,有三个实现：分别是PendingState,PaidState,ShipedState.
+
+主体是Order,状态是OrderState；主体Order调用process，等于是调用某一个OrderState实现的process，这个process里面是不同状态下的不同行为及结果。
+
+
+````
+demo_2关键要点
+
+1. 在这个例子中，行为的变化是自动的。
+````
+// 你不需要这样做：
+if (order.isPending()) {
+order.processPayment();
+} else if (order.isPaid()) {
+order.ship();
+}
+
+// 而是这样做：
+order.process(); // 自动根据当前状态执行正确操作
+````
+2. 状态转换是封装的
+* 状态之间的转换逻辑封装在各个状态类内部
+* 订单类不需要知道状态如何转换
+
+3. 符合开闭原则
+   
+    要添加新状态（如"canceled"）：
+````
+class CanceledState implements OrderState {
+     public void process(Order order) {
+        System.out.println("订单已取消，无法处理");
+    }
+}
+// 不需要修改现有的状态类或订单类！
+````
+通过状态模式，你可以让对象在运行时改变它的行为，而行为的变化是由内部状态的改变自动触发的，不需要在代码中写满条件判断语句。
+* 改变行为：同样的方法调用产生不同结果
+
+* 当状态变化时：行为变化是自动的、内聚的
+
+* 好处：代码更清晰、更易维护、更易扩展
+策略模式vs状态模式
+
+策略模式：客户端主动选择算法
+````
+// 客户端控制策略选择
+context.setStrategy(new BubbleSort());
+context.execute(); // 使用冒泡排序
+
+context.setStrategy(new QuickSort()); 
+context.execute(); // 使用快速排序
+````
+状态模式：状态自动转换，客户端不知道内部状态变化
+````
+// 状态自动转换，客户端只调用同一方法
+context.request(); // 状态A → 可能自动变为状态B
+context.request(); // 状态B → 可能自动变为状态C
+````
+总结
+
+* 面向对象的状态机：用类来表示状态，而不是枚举或字符串
+
+* 封装状态转换：状态转换逻辑封装在各个状态类内部
+
+* 自动策略切换：类似于策略模式，但状态转换是自动的
+
+* 消除条件判断：用多态代替大量的if-else语句
+
+状态模式特别适合处理那些对象行为高度依赖于其状态，且状态转换逻辑复杂的场景。
+
+### 模版方法模式
+特点：
+
+1. 固定流程，可变实现
+````
+// 流程永远是这样的：
+1. prepareBase()
+2. buildWalls() 
+3. addRoof()
+4. addOtherFloors()
+````
+2. 防止子类修改算法结构
+````
+public final void buildHouse() { // final关键字防止重写
+    // 固定步骤
+}
+````
+3. 钩子方法（可选）
+````
+abstract class HouseBuilder {
+    public final void buildHouse() {
+        prepareBase();
+        buildWalls();
+        addRoof();
+        if (needAdditionalFloors()) { // 钩子方法
+            addOtherFloors();
+        }
+    }
+    
+    // 钩子方法 - 子类可以覆盖来改变算法行为
+    protected boolean needAdditionalFloors() {
+        return true;
+    }
+}
+````
+现实中的例子：
+
+咖啡制作
+````
+// 固定流程：研磨 → 冲泡 → 加调料
+abstract class CoffeeMaker {
+    public final void makeCoffee() {
+        grindBeans();
+        brew();
+        addCondiments();
+    }
+}
+````
+数据处理
+````
+// 固定流程：读取 → 处理 → 保存
+abstract class DataProcessor {
+    public final void process() {
+        readData();
+        processData();
+        saveData();
+    }
+}
+````
+游戏循环
+````
+// 固定流程：输入 → 更新 → 渲染
+abstract class GameLoop {
+    public final void run() {
+        handleInput();
+        update();
+        render();
+    }
+}
+````
+模板方法模式的核心思想：
+
+定义一个操作中的算法骨架，而将一些步骤延迟到子类中。模板方法使得子类可以不改变算法结构的情况下，重新定义算法中的某些步骤。
+
+关键点：
+
+* 不变的部分：算法步骤的顺序和结构
+
+* 可变的部分：每个具体步骤的实现方式
+
+* 好处：代码复用、避免重复、确保一致性

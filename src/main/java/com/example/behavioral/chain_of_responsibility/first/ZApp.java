@@ -1,7 +1,7 @@
 package com.example.behavioral.chain_of_responsibility.first;
 
 // 测试类
-public class ChainOfResponsibilityDemo {
+public class ZApp {
     public static void main(String[] args) {
         // 准备责任链：bank -> paypal -> bitcoin
         // 优先级：Bank第一，如果不能支付则用PayPal，再不能则用Bitcoin

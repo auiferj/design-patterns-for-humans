@@ -1,5 +1,5 @@
-package com.example.strucural.decorator.first;
-// 香草装饰器
+package com.example.strucural.decorator.demo_1;
+// 香草装饰器，装饰器对象
 public class VanillaCoffee implements Coffee{
     protected Coffee coffee;
 
@@ -14,6 +14,6 @@ public class VanillaCoffee implements Coffee{
 
     @Override
     public String getDescription() {
-        return coffee.getDescription() + ", vanilla";
+        return coffee.getDescription() + ", 香草";
     }
 }

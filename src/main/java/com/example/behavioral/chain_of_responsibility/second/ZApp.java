@@ -1,7 +1,7 @@
 package com.example.behavioral.chain_of_responsibility.second;
 
 // 4. 使用示例
-public class ChainDemo {
+public class ZApp {
     public static void main(String[] args) {
         // 构建处理对象链
         Processor login = new LoginProcessor();

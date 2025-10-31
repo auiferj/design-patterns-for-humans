@@ -1,4 +1,4 @@
-package com.example.strucural.flyweight.first;
+package com.example.strucural.flyweight.demo_1;
 
 // 茶的类型 - 内在状态（可共享）
 class TeaType {

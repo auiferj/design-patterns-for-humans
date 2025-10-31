@@ -8,5 +8,5 @@ public interface Employee {
     double getSalary();
     void add(Employee employee);
     void remove(Employee employee);
-    List<Employee> getSubordinates();
+    List<Employee> getSubordinates();//下级
 }

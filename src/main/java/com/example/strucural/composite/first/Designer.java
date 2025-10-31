@@ -1,5 +1,6 @@
 package com.example.strucural.composite.first;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Designer implements Employee{
@@ -13,26 +14,26 @@ public class Designer implements Employee{
 
     @Override
     public String getName() {
-        return "";
+        return name;
     }
 
     @Override
     public double getSalary() {
-        return 0;
+        return salary;
     }
 
     @Override
     public void add(Employee employee) {
-
+        throw new UnsupportedOperationException("叶子节点不能添加下属");
     }
 
     @Override
     public void remove(Employee employee) {
-
+        throw new UnsupportedOperationException("叶子节点不能移除下属");
     }
 
     @Override
     public List<Employee> getSubordinates() {
-        return List.of();
+        return new ArrayList<>(); // 叶子节点没有下属
     }
 }

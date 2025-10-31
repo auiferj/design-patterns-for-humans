@@ -1,4 +1,4 @@
-package com.example.strucural.flyweight.first;
+package com.example.strucural.flyweight.demo_1;
 
 public class Main {
     public static void main(String[] args) {

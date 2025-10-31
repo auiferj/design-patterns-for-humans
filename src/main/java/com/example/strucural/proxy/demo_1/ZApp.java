@@ -1,6 +1,6 @@
-package com.example.strucural.proxy.first;
+package com.example.strucural.proxy.demo_1;
 // 4. 使用示例
-public class Main {
+public class ZApp {
     public static void main(String[] args) {
         // 创建带安全代理的门
         SecuredDoor securedDoor = new SecuredDoor(new LabDoor());

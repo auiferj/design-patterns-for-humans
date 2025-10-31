@@ -14,26 +14,27 @@ public class Department implements Employee{
 
     @Override
     public String getName() {
-        return "";
+        return name;
     }
 
     @Override
     public double getSalary() {
-        return 0;
+        // 部门的薪水是所有下属薪水的总和
+        return employees.stream().mapToDouble(Employee::getSalary).sum();
     }
 
     @Override
     public void add(Employee employee) {
-
+        employees.add(employee);
     }
 
     @Override
     public void remove(Employee employee) {
-
+        employees.remove(employee);
     }
 
     @Override
     public List<Employee> getSubordinates() {
-        return List.of();
+        return new ArrayList<>(employees);
     }
 }

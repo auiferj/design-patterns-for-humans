@@ -1,4 +1,4 @@
-package com.example.strucural.proxy.first;
+package com.example.strucural.proxy.demo_1;
 // 2. 实现基本的门功能
 public class LabDoor implements Door{
     public void open() {

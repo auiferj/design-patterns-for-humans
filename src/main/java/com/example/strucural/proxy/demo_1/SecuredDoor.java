@@ -1,4 +1,4 @@
-package com.example.strucural.proxy.first;
+package com.example.strucural.proxy.demo_1;
 // 3. 代理类 - 在基本功能上添加安全控制
 public class SecuredDoor {
     private Door door;

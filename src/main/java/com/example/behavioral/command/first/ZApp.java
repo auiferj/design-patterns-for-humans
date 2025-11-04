@@ -1,7 +1,12 @@
 package com.example.behavioral.command.first;
 // Client（客户） - 你
-public class RestaurantClient {
+public class ZApp {
     public static void main(String[] args) {
+        /**
+         * 调用者是waiter，调用者调用命令对象，命令对象内部再调用接收者去做事情
+         */
+
+
         // 创建接收者
         Chef chef = new Chef();
 
@@ -22,8 +27,6 @@ public class RestaurantClient {
         // 客户点餐：牛排
         waiter.setCommand(steakOrder);
         waiter.takeOrder();
-        // 输出：
-        // 服务员：收到订单，转交给厨师
-        // 厨师：正在制作牛排
+
     }
 }

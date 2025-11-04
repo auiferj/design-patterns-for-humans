@@ -1,7 +1,7 @@
 package com.example.behavioral.iterator.first;
 
 // 使用收音机
-public class RadioDemo {
+public class ZApp {
     public static void main(String[] args) {
         double[] radioFrequencies = {88.5, 89.0, 89.5, 90.0, 90.5, 91.0};
         Radio radio = new Radio(radioFrequencies);//把数组放到遍历器中，将遍历器放到收音机（创建迭代器的工厂）中。

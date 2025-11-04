@@ -1,9 +1,7 @@
 package com.example.behavioral.memento.first;
 
-import java.util.Stack;
-
 // 使用示例
-class MementoDemo {
+class ZApp {
     public static void main(String[] args) {
         TextEditor editor = new TextEditor();
         HistoryManager history = new HistoryManager();

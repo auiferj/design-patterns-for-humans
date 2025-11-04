@@ -9,8 +9,8 @@ class JobSeeker implements Observer {
     }
 
     @Override
-    public void onJobPosted(JobPost job) {
+    public void onJobPosted(String jobPosting) {
         // 处理职位发布通知
-        System.out.println("Hi " + this.name + "! New job posted: " + job.getTitle());
+        System.out.println("Hi " + this.name + "! New job posted: " + jobPosting);
     }
 }

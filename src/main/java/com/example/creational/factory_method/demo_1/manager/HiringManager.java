@@ -4,7 +4,7 @@ import com.example.creational.factory_method.demo_1.interviewer.Interviewer;
 
 /**
  * 人事经理
- * 角色：创建者/工厂
+ * 角色：抽象工厂
  */
 public abstract class HiringManager {
     // 工厂方法---子类决定具体实现

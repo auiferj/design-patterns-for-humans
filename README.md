@@ -2,16 +2,16 @@
 
 | **创建型设计模式 (Creational Design Patterns)** | **结构型设计模式 (Structural Design Patterns)** | **行为型设计模式 (Behavioral Design Patterns)** |
 |:-----------------------------------------|:-----------------------------------------|:-----------------------------------------|
-| Simple Factory（简单工程）                     | Adapter（适配器）                             | Chain of Responsibility（责任链）             |
-| Factory Method（工厂方法）                     | Bridge                                   | Command                                  |
-| Abstract Factory（抽象工厂）                   | Composite                                | Iterator                                 |
-| Builder（创建者）                             | Decorator                                | Mediator                                 |
-| Prototype（原型）                            | Facade                                   | Memento                                  |
-| Singleton（单例）                            | Flyweight                                | Observer                                 |
-|                                          | Proxy                                    | Visitor                                  |
-|                                          |                                          | Strategy                                 |
-|                                          |                                          | State                                    |
-|                                          |                                          | Template Method                          |
+| [Simple Factory（简单工程）](#简单工厂)                     | Adapter（适配器）                             | [Chain of Responsibility（责任链）](#责任链模式)             |
+| [Factory Method（工厂方法）](#工厂方法)                     | [Bridge](#桥接模式)                                   | [Command](#命令模式)                                  |
+| [Abstract Factory（抽象工厂）](#抽象工厂)                   | [Composite](#组合模式)                                | [Iterator](#迭代器模式)                                 |
+| [Builder（创建者）](#建造者)                             | [Decorator](#装饰器模式)                                | [Mediator](#中介者模式)                                 |
+| [Prototype（原型）](#原型模式)                            | [Facade](#外观模式)                                   | [Memento](#备忘录模式)                                  |
+| [Singleton（单例）](#单例模式)                            | [Flyweight](#享元模式)                                | [Observer](#观察者模式)                                 |
+|                                          | [Proxy](#代理模式)                                    | [Visitor](#访问者模式)                                  |
+|                                          |                                          | [Strategy](#策略模式)                                 |
+|                                          |                                          | [State](#状态模式)                                    |
+|                                          |                                          | [Template Method](#模版方法模式)                          |
 
 ### 简单工厂
 简单工厂模式只是为客户端生成一个实例，而不向客户端暴露任何实例化的逻辑。
@@ -1354,6 +1354,11 @@ for (PhoneDisplay observer : this.observers) {
 每个 PhoneDisplay 对象的 update 方法被调用后，它内部的代码就会执行，比如刷新屏幕上的温度显示。
 
 ### 访问者模式
+访问者模式（Visitor Pattern）主要用于将“数据结构”和“对数据的操作”分离。
+当我们有不同类型的对象时，可以用访问者模式在不修改这些对象类的前提下，定义新的操作。
+
+核心思想：把对不同对象的操作逻辑从对象本身中抽离出来
+
 核心思想：不修改原有类，却能扩展新功能
 
 传统方式的局限：

@@ -1,4 +1,4 @@
-package com.example.behavioral.visitor.first;
+package com.example.behavioral.visitor.demo_1;
 
 // XML导出器 - 另一个新功能，不修改原有类
 class XMLExporter implements Visitor {

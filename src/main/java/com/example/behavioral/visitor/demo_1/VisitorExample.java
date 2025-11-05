@@ -1,4 +1,4 @@
-package com.example.behavioral.visitor.first;
+package com.example.behavioral.visitor.demo_1;
 
 public class VisitorExample {
     public static void main(String[] args) {

@@ -1,6 +1,6 @@
 package com.example.behavioral.strategy.first;
 
-public class StrategyPatternExample {
+public class ZApp {
     public static void main(String[] args) {
         int[] smallDataset = {1, 3, 4, 2};
         int[] mediumDataset = {1, 4, 3, 2, 8, 10};

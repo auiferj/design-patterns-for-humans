@@ -1,4 +1,4 @@
-package com.example.behavioral.visitor.first;
+package com.example.behavioral.visitor.demo_1;
 
 class Rectangle {
     private double width, height;

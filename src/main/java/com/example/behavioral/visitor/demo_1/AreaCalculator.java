@@ -1,4 +1,4 @@
-package com.example.behavioral.visitor.first;
+package com.example.behavioral.visitor.demo_1;
 
 // 面积计算器 - 新增功能，不修改原有类
 class AreaCalculator implements Visitor {

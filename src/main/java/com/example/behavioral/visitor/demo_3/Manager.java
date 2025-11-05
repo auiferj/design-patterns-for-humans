@@ -1,0 +1,19 @@
+package com.example.behavioral.visitor.demo_3;
+
+// 4️⃣ 具体元素类：经理
+class Manager implements Employee {
+    private String name;
+
+    public Manager(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+}

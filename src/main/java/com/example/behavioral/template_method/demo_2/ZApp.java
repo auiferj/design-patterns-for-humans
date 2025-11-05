@@ -1,6 +1,6 @@
 package com.example.behavioral.template_method.demo_2;
 
-public class ConstructionCompanyApp {
+public class ZApp {
     public static void main(String[] args) {
         System.out.println("建造木屋:");
         HouseBuilder woodHouse = new WoodHouseBuilder();

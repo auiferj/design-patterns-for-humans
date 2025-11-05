@@ -1,4 +1,4 @@
-package com.example.behavioral.visitor.first;
+package com.example.behavioral.visitor.demo_1;
 
 // 1. 不修改原有图形类
 class Circle {

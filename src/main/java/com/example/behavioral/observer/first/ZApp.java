@@ -7,12 +7,12 @@ public class ZApp {
         JobSeeker janeDoe = new JobSeeker("Jane Doe");
 
         // 创建发布者并附加订阅者
-        JobWebsite jobPostings = new JobWebsite();
-        jobPostings.attach(johnDoe);
-        jobPostings.attach(janeDoe);
+        JobWebsite jobWebsite = new JobWebsite();
+        jobWebsite.attach(johnDoe);
+        jobWebsite.attach(janeDoe);
 
         // 添加新职位并查看订阅者是否收到通知
-        jobPostings.addJob("软件工程师");
+        jobWebsite.addJob("软件工程师");
 
     }
 }

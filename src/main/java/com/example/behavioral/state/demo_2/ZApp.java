@@ -5,12 +5,19 @@ public class ZApp {
         // 同样的draw方法，不同的行为！
         Brush brush = new Brush();
 
-        // 选择红色状态
-        brush.setColor(new RedState());
-        brush.draw(10, 20); // 输出: 在位置(10,20)绘制红色像素
+        // 初始状态（默认红色）
+        brush.draw(10, 20);
 
-        // 切换到蓝色状态
+        // 切换为蓝色
         brush.setColor(new BlueState());
-        brush.draw(30, 40); // 输出: 在位置(30,40)绘制蓝色像素
+        brush.draw(30, 40);
+
+        // 切换为绿色
+        brush.setColor(new GreenState());
+        brush.draw(50, 60);
+
+        // 再切回红色
+        brush.setColor(new RedState());
+        brush.draw(70, 80);
     }
 }

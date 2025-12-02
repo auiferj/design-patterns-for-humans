@@ -6,6 +6,7 @@ import java.util.List;
 public class Sheep implements Cloneable{
     protected String name;
     protected String category;
+    //trait:特点，特征
     protected List<String> traits; // 引用类型字段
 
     public Sheep(String name) {

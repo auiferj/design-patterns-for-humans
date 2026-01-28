@@ -1,6 +1,9 @@
 package com.example.behavioral.command.first;
 
-// ConcreteCommand（具体命令）
+/**
+ * pasta:意大利面
+ * ConcreteCommand（具体命令）
+ */
 class PastaCommand implements Command {
     private Chef chef;
 

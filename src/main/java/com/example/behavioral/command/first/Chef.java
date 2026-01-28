@@ -1,5 +1,7 @@
 package com.example.behavioral.command.first;
-// Receiver（接收者） - 厨师
+/**
+ * Receiver（接收者） - 厨师
+ */
 public class Chef {
     public void cookPasta() {
         System.out.println("厨师：正在制作意大利面");

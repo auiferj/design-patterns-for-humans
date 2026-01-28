@@ -7,22 +7,19 @@ public class ZApp {
          */
 
 
-        // 创建接收者
+        // 接收者
         Chef chef = new Chef();
 
-        // 创建具体命令
+        // 具体命令
         Command pastaOrder = new PastaCommand(chef);
         Command steakOrder = new SteakCommand(chef);
 
-        // 创建调用者
+        // 调用者
         Waiter waiter = new Waiter();
 
         // 客户点餐：意大利面
         waiter.setCommand(pastaOrder);
         waiter.takeOrder();
-        // 输出：
-        // 服务员：收到订单，转交给厨师
-        // 厨师：正在制作意大利面
 
         // 客户点餐：牛排
         waiter.setCommand(steakOrder);

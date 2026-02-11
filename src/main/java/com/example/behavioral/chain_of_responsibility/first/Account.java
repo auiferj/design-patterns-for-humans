@@ -19,7 +19,7 @@ public abstract class Account {
         }
     }
 
-    public boolean canPay(double amount) {
-        return this.balance >= amount;
+    public boolean canPay(double amountToPay) {
+        return this.balance >= amountToPay;
     }
 }
